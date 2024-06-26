@@ -108,7 +108,7 @@ const AuthComponent = () => {
           alignItems="center"
           justifyContent="center"
           borderRadius={"2rem"}
-          marginRight={"2rem"}
+          marginRight={"5rem"}
         >
           <Typography
             variant="h6"
@@ -186,7 +186,7 @@ const AuthComponent = () => {
           alignItems="center"
           justifyContent="center"
           borderRadius={"2rem"}
-          marginRight={"2rem"}
+          marginRight={"5rem"}
         >
           <Typography
             variant="h6"
@@ -265,7 +265,7 @@ const AuthComponent = () => {
           alignItems="center"
           justifyContent="center"
           borderRadius={"2rem"}
-          marginRight={"2rem"}
+          marginRight={"5rem"}
         >
           <Typography
             variant="h6"
@@ -317,7 +317,7 @@ const AuthComponent = () => {
           alignItems="center"
           justifyContent="center"
           borderRadius={"2rem"}
-          marginRight={"2rem"}
+          marginRight={"5rem"}
         >
           <Typography
             variant="h6"
@@ -381,7 +381,7 @@ const AuthComponent = () => {
           alignItems="center"
           justifyContent="center"
           borderRadius={"2rem"}
-          marginRight={"2rem"}
+          marginRight={"5rem"}
         >
           <Typography
             variant="h6"
