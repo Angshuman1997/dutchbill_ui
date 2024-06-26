@@ -1,0 +1,19 @@
+.auth-box {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 400px;
+  height: auto; 
+  box-sizing: border-box;
+}
+
+.auth-view {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+}
