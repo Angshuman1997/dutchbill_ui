@@ -1,13 +1,13 @@
 .auth-box {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   margin: 5rem;
   padding: 2rem;
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  min-height: 400px;
+  min-height: 600px;
   height: auto; 
   box-sizing: border-box;
 }

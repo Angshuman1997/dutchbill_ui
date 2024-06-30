@@ -5,6 +5,7 @@ import Image1 from "../../images/friends-bill-1.svg";
 import Image2 from "../../images/friends-bill-2.svg";
 import Image3 from "../../images/friends-bill-3.svg";
 import "./LandingPage.css";
+import Header from "../../components/Header/Header";
 
 const images = [Image1, Image2, Image3];
 
@@ -20,22 +21,48 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <Box display="flex" height="100vh" width="100vw" bgcolor="#1050bf" overflow="hidden">
-      <Box flex={7} display="flex" justifyContent="center" alignItems="center" overflow="hidden">
-        <div className="image-wrapper">
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Illustration ${index + 1}`}
-              className={`image ${index === currentImageIndex ? "image-visible" : ""}`}
-            />
-          ))}
-        </div>
-      </Box>
-      <Box flex={3} display="flex" justifyContent="center" alignItems="center">
-        <AuthComponent />
-      </Box>
+    <Box
+      display="flex"
+      height="100vh"
+      width="100vw"
+      bgcolor="#1050bf"
+      overflow="hidden"
+      flexDirection="column"
+    >
+      <div className="header">
+        <Header />
+      </div>
+      <div className="main">
+        <Box
+          flex={7}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          overflow="hidden"
+        >
+          <div className="image-wrapper">
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Illustration ${index + 1}`}
+                className={`image ${
+                  index === currentImageIndex ? "image-visible" : ""
+                }`}
+              />
+            ))}
+          </div>
+        </Box>
+        <Box
+          flex={3}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ width: "100%" }}
+        >
+          <AuthComponent />
+        </Box>
+      </div>
     </Box>
   );
 };

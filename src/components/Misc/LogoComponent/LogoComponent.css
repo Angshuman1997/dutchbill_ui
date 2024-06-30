@@ -1,0 +1,23 @@
+.logo-main {
+    display: flex;
+    align-items: flex-end; /* Align items at the bottom */
+    font-weight: bold;
+  }
+  
+  .logo-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    margin-right: 3px;
+    margin-bottom: 4px; /* Adjust this value as needed */
+  }
+  
+  .logo-text {
+    letter-spacing: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: white;
+    line-height: 1; /* Ensure text height doesn't affect alignment */
+  }
+  
