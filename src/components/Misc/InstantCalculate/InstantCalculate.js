@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, List, Collapse, Typography } from "@mui/material";
+import { Button, List, Collapse } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 import ExpenseItem from "./ExpenseItem";
 import SettlementList from "./SettlementList";
@@ -135,6 +135,7 @@ const InstantCalculate = () => {
   useEffect(() => {
     calculateSettlements();
     console.log('items', items)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   return (
