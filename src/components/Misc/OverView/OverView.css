@@ -1,0 +1,5 @@
+.overview-pay-box-scrollable-container {
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+  }
+  

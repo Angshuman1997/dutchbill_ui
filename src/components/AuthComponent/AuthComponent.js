@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Grow, TextField, Typography } from "@mui/material";
 import "./AuthComponent.css"; // Ensure you create and import this CSS file for the transition styles
 
-const AuthComponent = () => {
+const AuthComponent = ({handleLoggedIn}) => {
   const [currentView, setCurrentView] = useState("login");
   const [stageTrans, setStageTrans] = useState(true);
   const [formData, setFormData] = useState({
@@ -14,6 +14,9 @@ const AuthComponent = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  const defaultLoginCreds = {username: "admin",
+  password: "12345"}
 
   const initialValue = {
     username: "",
@@ -48,8 +51,9 @@ const AuthComponent = () => {
   }
 
   function handleLogin() {
-    console.log("Login data:", formData);
-    // Implement login logic here
+    if(formData.username === defaultLoginCreds.username && formData.password === defaultLoginCreds.password){
+      handleLoggedIn();
+    }
   }
 
   function handleSignup() {
