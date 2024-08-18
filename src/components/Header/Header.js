@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import LogoComponent from "../Misc/LogoComponent/LogoComponent";
 import "./Header.css";
 import { Button } from "@mui/material";
 import LoginModal from "../../pages/Login/LoginModal";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions/actionTypes";
+import LogoComponent from "../LogoComponent/LogoComponent";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
