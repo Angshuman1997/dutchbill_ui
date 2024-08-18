@@ -3,8 +3,9 @@ import Tab from "../Tab/Tab";
 import "./SideBar.css";
 import { useDispatch } from "react-redux";
 import { setTabSelect } from "../../redux/actions/actionTypes";
+import { Button } from "@mui/material";
 
-const SideBar = () => {
+const SideBar = ({ handleOpenAddExpense }) => {
   const dispatch = useDispatch();
   const [selectedTab, setSelectedTab] = useState("Overview");
 
@@ -35,11 +36,24 @@ const SideBar = () => {
         active={selectedTab === "InstantCalculate"}
         onClick={() => handleTabClick("InstantCalculate")}
       />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={()=>handleOpenAddExpense()}
+        style={{ marginTop: "16px" }}
+      >
+        Add Expenses
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={()=>{}}
+        style={{ marginTop: "16px" }}
+      >
+        Add Friends
+      </Button>
     </div>
   );
 };
 
 export default SideBar;
-
-// <Tab label="Plan Expense" active={selectedTab === 'PlanExpense'} onClick={()=>handleTabClick('PlanExpense')} />
-// <Tab label="Settings" active={selectedTab === 'Settings'} onClick={() => handleTabClick('Settings')} />

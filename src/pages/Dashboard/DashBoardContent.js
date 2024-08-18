@@ -1,29 +1,27 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import OverView from '../../components/Misc/OverView/OverView';
-import Expenses from '../../components/Misc/Expenses/Expenses';
-import Groups from '../../components/Misc/Groups/Groups';
-import InstantCalculate from '../../components/Misc/InstantCalculate/InstantCalculate';
-import Settings from '../../components/Misc/Settings/Settings';
-import PlanExpense from '../../components/Misc/PlanExpense/PlanExpense';
+import React from "react";
+import { useSelector } from "react-redux";
+import OverView from "../../components/OverView/OverView";
+import Expenses from "../../components/Expenses/Expenses";
+import Groups from "../../components/Groups/Groups";
+import InstantCalculate from "../../components/InstantCalculate/InstantCalculate";
 
 const DashBoardContent = () => {
-  const tabSelect = useSelector(state=>state.tabSelect);
+  const tabSelect = useSelector((state) => state.tabSelect);
 
-  const TabContent = () =>{
-    switch(tabSelect){
-      case 'Expenses': return <Expenses />;
-      case 'Groups': return <Groups />;
-      case 'InstantCalculate': return <InstantCalculate />;
-      case 'PlanExpense': return <PlanExpense />
-      case 'Settings': return <Settings />;
-      default: return <OverView />;
+  const TabContent = () => {
+    switch (tabSelect) {
+      case "Expenses":
+        return <Expenses />;
+      case "Groups":
+        return <Groups />;
+      case "InstantCalculate":
+        return <InstantCalculate />;
+      default:
+        return <OverView />;
     }
-  }
+  };
 
-  return (
-    <React.Fragment>{TabContent()}</React.Fragment>
-  )
-}
+  return <React.Fragment>{TabContent()}</React.Fragment>;
+};
 
-export default DashBoardContent
+export default DashBoardContent;

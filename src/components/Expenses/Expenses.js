@@ -5,24 +5,13 @@ import {
   AccordionDetails,
   Chip,
   Typography,
-  Button,
   MenuItem,
   Select,
   FormControl,
   InputLabel
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddExpenseModal from './AddExpenseModal'; // Import the new modal component
 
-const persons = [
-  { name: 'Alice', personId: 'alice1' },
-  { name: 'Bob', personId: 'bob2' },
-  { name: 'Charlie', personId: 'charlie3' },
-];
-
-const userId = 'ab123';
-
-const expenseTypes = [{expenseType: 'Food'}, {expenseType: 'Shopping'}, {expenseType: 'Movie'}, {expenseType: 'Travel'}, {expenseType: 'Borrow'}, {expenseType: 'Others'}]
 
 const data = [
 
@@ -85,11 +74,9 @@ const data = [
 ]
 
 const Expenses = () => {
-  const [open, setOpen] = useState(false);
+  
   const [filter, setFilter] = useState('');
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  
   const handleFilterChange = (event) => setFilter(event.target.value);
 
   const filteredData = data.filter(item => {
@@ -113,14 +100,6 @@ const Expenses = () => {
             ))}
           </Select>
         </FormControl>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleOpen} 
-          style={{ marginTop: '16px' }}
-        >
-          Add Expense
-        </Button>
       </div>
       {filteredData.map((item) => (
         <Accordion key={item.expenseId}>
@@ -146,7 +125,6 @@ const Expenses = () => {
           </AccordionDetails>
         </Accordion>
       ))}
-      <AddExpenseModal open={open} onClose={handleClose} persons={persons} expenseTypes={expenseTypes} userId={userId} />
     </div>
   );
 }
