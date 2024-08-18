@@ -1,7 +1,7 @@
 // src/reducers/valueReducer.js
 import { 
     TAB_SELECT, 
-    SET_VALUE_2, 
+    USER_DATA, 
     SET_VALUE_3, 
     SET_VALUE_4, 
     SET_VALUE_5 
@@ -9,7 +9,7 @@ import {
   
   const initialState = {
     tabSelect: 'Overview',
-    value2: null,
+    userData: {},
     value3: null,
     value4: null,
     value5: null,
@@ -22,10 +22,10 @@ import {
           ...state,
           tabSelect: action.payload,
         };
-      case SET_VALUE_2:
+      case USER_DATA:
         return {
           ...state,
-          value2: action.payload,
+          userData: action.payload,
         };
       case SET_VALUE_3:
         return {

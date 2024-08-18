@@ -1,16 +1,8 @@
 .dashboard-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full height of the viewport */
-}
-
-header {
-  flex: 0 0 auto;
-  width: 100%;
-  background-color: #333; /* Example background color */
-  color: #fff; /* Example text color */
-  padding: 10px 20px; /* Example padding */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Example shadow for depth */
+  height: 100vh; 
+  overflow: hidden;
 }
 
 .dashboard-container {
@@ -52,7 +44,7 @@ header {
   flex: 1; /* Take the remaining space */
   background-color: #ffffff; /* Example background color */
   padding: 20px; /* Example padding */
-  overflow-y: auto; /* Ensure it scrolls if content overflows */
+  overflow-y: scroll; /* Ensure it scrolls if content overflows */
 }
 
 /* Media query for smaller screens */

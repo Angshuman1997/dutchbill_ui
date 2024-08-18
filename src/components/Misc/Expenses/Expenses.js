@@ -14,19 +14,34 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddExpenseModal from './AddExpenseModal'; // Import the new modal component
 
+const persons = [
+  { name: 'Alice', personId: 'alice1' },
+  { name: 'Bob', personId: 'bob2' },
+  { name: 'Charlie', personId: 'charlie3' },
+];
+
+const userId = 'ab123';
+
+const expenseTypes = [{expenseType: 'Food'}, {expenseType: 'Shopping'}, {expenseType: 'Movie'}, {expenseType: 'Travel'}, {expenseType: 'Borrow'}, {expenseType: 'Others'}]
+
 const data = [
+
+  // DB store format
   {
-    type: "pay",
+    type: "pay", // the person who addes the expense will be type = receive  
     expenseType: "Food",
-    ifOthersComment: null,
-    payTo: "Anshuli",
-    receiveFrom: null,
+    ifOthersComment: null, // ''
+    payTo: "Anshuli", // Based on paidById this should be in OverView
+    payToId: "Anshul001",
+    receiveFrom: null, // personId OverView
+    receiveFromId: null,
     amount: "100",
-    status: "pending",
-    expenseId: "1",
-    trnscDate: '02/07/2024',
-    trnscCompleteDate: null,
-    groupId: "1"
+    status: "pending", // Added from backend
+    expenseId: "1", // generated on DB
+    trnscDate: '02/07/2024', // Added from Backend
+    trnscCompleteDate: null, // Added from Backend
+    groupId: "", // if empty pass non group unique ID
+    groupName: "Non Group",
   },
   {
     type: "receive",
@@ -131,7 +146,7 @@ const Expenses = () => {
           </AccordionDetails>
         </Accordion>
       ))}
-      <AddExpenseModal open={open} onClose={handleClose} />
+      <AddExpenseModal open={open} onClose={handleClose} persons={persons} expenseTypes={expenseTypes} userId={userId} />
     </div>
   );
 }

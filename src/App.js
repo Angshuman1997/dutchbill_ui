@@ -1,11 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Route,  Routes } from 'react-router-dom';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Main from './pages/Main/Main';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Main from "./pages/Main/Main";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route exact path="/" element={<Main />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -15,15 +18,3 @@ const App = () => {
 };
 
 export default App;
-
-
-// <nav>
-//         <ul>
-//           <li>
-//             <Link to="/">Home</Link>
-//           </li>
-//           <li>
-//             <Link to="/dashboard">Dashboard</Link>
-//           </li>
-//         </ul>
-//       </nav>

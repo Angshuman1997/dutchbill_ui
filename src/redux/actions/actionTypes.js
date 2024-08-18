@@ -1,6 +1,6 @@
 import { 
     TAB_SELECT, 
-    SET_VALUE_2, 
+    USER_DATA, 
     SET_VALUE_3, 
     SET_VALUE_4, 
     SET_VALUE_5 
@@ -11,8 +11,8 @@ import {
     payload: value,
   });
   
-  export const setValue2 = (value) => ({
-    type: SET_VALUE_2,
+  export const setUserData = (value) => ({
+    type: USER_DATA,
     payload: value,
   });
   

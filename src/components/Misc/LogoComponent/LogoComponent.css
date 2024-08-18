@@ -1,23 +1,57 @@
 .logo-main {
-    display: flex;
-    align-items: flex-end; /* Align items at the bottom */
-    font-weight: bold;
+  display: flex;
+  align-items: flex-end; /* Align items at the bottom */
+  font-weight: bold;
+  padding: 10px; /* Add some padding for better spacing */
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: 3px;
+  margin-bottom: 4px; /* Adjust this value as needed */
+}
+
+.logo-text {
+  letter-spacing: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  color: white;
+  line-height: 1; /* Ensure text height doesn't affect alignment */
+}
+
+@media (max-width: 768px) {
+  .logo-main {
+    padding: 5px; /* Reduce padding on smaller screens */
   }
   
   .logo-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: white;
-    margin-right: 3px;
-    margin-bottom: 4px; /* Adjust this value as needed */
+    width: 8px;
+    height: 8px; /* Adjust dot size for smaller screens */
+    margin-right: 2px;
+    margin-bottom: 3px;
   }
-  
+
   .logo-text {
-    letter-spacing: 1px;
-    font-family: Arial, sans-serif;
-    font-size: 30px;
-    color: white;
-    line-height: 1; /* Ensure text height doesn't affect alignment */
+    font-size: 24px; /* Reduce font size on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-main {
+    padding: 2px; /* Further reduce padding on very small screens */
   }
   
+  .logo-dot {
+    width: 6px;
+    height: 6px; /* Further adjust dot size for very small screens */
+    margin-right: 1px;
+    margin-bottom: 2px;
+  }
+
+  .logo-text {
+    font-size: 20px; /* Further reduce font size on very small screens */
+  }
+}
