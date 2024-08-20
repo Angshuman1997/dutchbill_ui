@@ -26,16 +26,6 @@ const SideBar = ({ handleOpenAddExpense }) => {
         active={selectedTab === "Expenses"}
         onClick={() => handleTabClick("Expenses")}
       />
-      <Tab
-        label="Groups"
-        active={selectedTab === "Groups"}
-        onClick={() => handleTabClick("Groups")}
-      />
-      <Tab
-        label="Instant Calculate"
-        active={selectedTab === "InstantCalculate"}
-        onClick={() => handleTabClick("InstantCalculate")}
-      />
       <Button
         variant="contained"
         color="primary"
@@ -44,16 +34,21 @@ const SideBar = ({ handleOpenAddExpense }) => {
       >
         Add Expenses
       </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={()=>{}}
-        style={{ marginTop: "16px" }}
-      >
-        Add Friends
-      </Button>
     </div>
   );
 };
 
 export default SideBar;
+
+// For later
+
+// <Tab
+//         label="Groups"
+//         active={selectedTab === "Groups"}
+//         onClick={() => handleTabClick("Groups")}
+//       />
+//       <Tab
+//         label="Instant Calculate"
+//         active={selectedTab === "InstantCalculate"}
+//         onClick={() => handleTabClick("InstantCalculate")}
+//       />

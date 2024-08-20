@@ -5,21 +5,15 @@ import DashBoardContent from "./DashBoardContent";
 import AddExpense from "../../components/AddExpense/AddExpense";
 import "./Dashboard.css";
 import { toast } from "react-toastify";
+import { addExpense } from "../../api/apiFunc";
 
 // pass From API
-const persons = [
-  { name: "Alice", personId: "alice1" },
-  { name: "Bob", personId: "bob2" },
-  { name: "Charlie", personId: "charlie3" },
-];
 
-const group = [
-  { groupName: "BTM Team", groupId: "1234" },
-  { groupName: "School", groupId: "0987" },
-  { groupName: "College", groupId: "5637" },
-];
-
-const userId = "ab123";
+// const group = [
+//   { groupName: "BTM Team", groupId: "1234" },
+//   { groupName: "School", groupId: "0987" },
+//   { groupName: "College", groupId: "5637" },
+// ];
 
 const expenseTypes = [
   { expenseType: "Food" },
@@ -43,12 +37,23 @@ const Dashboard = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
-  useEffect(()=>{
-    if(addExpenseData) {
-      console.log("hi", addExpenseData)
-      toast.success("Expense Added");
-      setAddExpenseData(null);
-    }
+  useEffect(() => {
+    const addExpenseAsync = async () => {
+      if (addExpenseData) {
+        try {
+          const result = await addExpense(addExpenseData);
+          if(result.success) {
+            toast.success(result.message);
+          } else {
+            toast.error(result.message);
+          }
+        } catch (error) {
+          toast.error(error.message);
+        }
+      }
+    };
+    addExpenseAsync();
+    setAddExpenseData(null);
   }, [addExpenseData]);
 
   // Add an effect to handle initial sidebar state based on screen width
@@ -84,10 +89,8 @@ const Dashboard = () => {
       <AddExpense
         open={openAddExpense}
         onClose={handleCloseAddExpense}
-        persons={persons}
         expenseTypes={expenseTypes}
-        userId={userId}
-        group={group}
+        // group={group}
         addExpense={handleDataAddExpense}
       />
     </div>

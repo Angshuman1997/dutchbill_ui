@@ -10,18 +10,21 @@ import {
   IconButton,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { getAllUser } from "../../api/apiFunc";
+import { useSelector } from "react-redux";
 
-const dataFormate = (userId) => {
+const dataFormate = (user) => {
   return {
     expenseType: null,
     persons: [],
     amount: 0,
     shareType: "equal",
-    group: null,
+    // group: null,
     ifOthersComment: "",
-    paidById: userId,
+    paidBy: user,
     amountDistribution: {},
   };
 };
@@ -29,20 +32,46 @@ const dataFormate = (userId) => {
 const AddExpense = ({
   open,
   onClose,
-  persons,
   expenseTypes,
-  userId,
-  group,
+  // group,
   addExpense,
 }) => {
-  const [formData, setFormData] = useState(dataFormate(userId));
-  const [grpExp, setGrpExp] = useState(false);
+  const userData = useSelector((state) => state.userData);
+
+  const [formData, setFormData] = useState(dataFormate(userData.data));
+  // const [grpExp, setGrpExp] = useState(false);
+  const [search, setSearch] = useState('');
+  const [persons, setPersons] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openAutocomplete, setOpenAutocomplete] = useState(false);
+ 
+  
+  useEffect(()=>{
+    if (search && openAutocomplete) {
+      setLoading(true);
+      getAllUser({ userId: userData.data._id, search: search })
+        .then((result) => {
+          if (result.length > 0) {
+            setPersons(result);
+          } else {
+            setPersons([]);
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          setPersons([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [search, openAutocomplete, userData]);
 
   useEffect(() => {
     if (formData.shareType === "equal" && formData.persons.length > 0) {
       const equalAmount = formData.amount / formData.persons.length;
       const personsWithAmount = formData.persons.reduce((acc, person) => {
-        acc[person.personId] = equalAmount;
+        acc[person._id] = equalAmount;
         return acc;
       }, {});
       setFormData((prev) => ({
@@ -61,9 +90,9 @@ const AddExpense = ({
     setFormData((prev) => ({ ...prev, persons: value }));
   };
 
-  const handleAutocompleteChangeGroup = (event, value) => {
-    setFormData((prev) => ({ ...prev, group: value }));
-  };
+  // const handleAutocompleteChangeGroup = (event, value) => {
+  //   setFormData((prev) => ({ ...prev, group: value }));
+  // };
 
   const handleAutocompleteChangeExpenseType = (event, value) => {
     setFormData((prev) => ({ ...prev, expenseType: value }));
@@ -73,28 +102,29 @@ const AddExpense = ({
     setFormData((prev) => ({ ...prev, shareType: event.target.value }));
   };
 
-  const handleCheckboxChangeGrpExp = (event) => {
-    setGrpExp((prev) => !prev);
-  };
+  // const handleCheckboxChangeGrpExp = (event) => {
+  //   setGrpExp((prev) => !prev);
+  // };
 
   const handleAmountChange = (event) => {
     const amount = parseFloat(event.target.value) || 0;
     setFormData((prev) => ({ ...prev, amount }));
   };
 
-  const handleIndividualAmountChange = (personId, value) => {
+  const handleIndividualAmountChange = (_id, value) => {
+    console.log("hi", _id)
     const amount = parseFloat(value) || 0;
     setFormData((prev) => ({
       ...prev,
       amountDistribution: {
         ...prev.amountDistribution,
-        [personId]: amount,
+        [_id]: amount,
       },
     }));
   };
 
   const resetForm = () => {
-    setFormData(dataFormate(userId));
+    setFormData(dataFormate(userData.data));
   };
 
   const handleSubmit = (event) => {
@@ -108,12 +138,12 @@ const AddExpense = ({
       expenseType: formData.expenseType.expenseType,
     };
 
-    if(!grpExp) {
-        payLoadData.group = {
-            groupName: "Non Group Expense",
-            groupId: 1223
-        }
-    }
+    // if(!grpExp) {
+    //     payLoadData.group = {
+    //         groupName: "Non Group Expense",
+    //         groupId: 1223
+    //     }
+    // }
     addExpense(payLoadData);
     resetForm();
     onClose();
@@ -208,52 +238,28 @@ const AddExpense = ({
               />
             </Box>
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={grpExp}
-                  onChange={handleCheckboxChangeGrpExp}
-                  value={grpExp}
-                />
-              }
-              label="Group Expense"
-            />
-
-            <Autocomplete
-              disabled={!grpExp}
-              options={group}
-              getOptionLabel={(option) => option.groupName}
-              value={formData.group}
-              onChange={handleAutocompleteChangeGroup}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Group"
-                  placeholder="Select a group"
-                  margin="normal"
-                  fullWidth
-                />
-              )}
-            />
+            
 
             <Autocomplete
               multiple
+              open={openAutocomplete}
+              onOpen={() => setOpenAutocomplete(true)}
+              onClose={() => setOpenAutocomplete(false)}
+              onInputChange={(event, value) => setSearch(value)}
               options={persons}
+              loading={loading}
               getOptionLabel={(option) => option.name}
               value={formData.persons}
               onChange={handleAutocompleteChangePerson}
               renderTags={(value, getTagProps) =>
-                value.map((option, index) => {
-                  const { key, ...tagProps } = getTagProps({ index });
-                  return (
-                    <Chip
-                      key={option.personId} // Use a unique key, for example, option.personId
-                      variant="outlined"
-                      label={option.name}
-                      {...tagProps} // Spread the rest of the props excluding `key`
-                    />
-                  );
-                })
+                value.map((option, index) => (
+                  <Chip
+                    key={`${option.username}-${index}`}
+                    variant="outlined"
+                    label={option.name}
+                    {...getTagProps({ index })}
+                  />
+                ))
               }
               renderInput={(params) => (
                 <TextField
@@ -261,8 +267,22 @@ const AddExpense = ({
                   label="Persons"
                   margin="normal"
                   fullWidth
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
                 />
               )}
+              noOptionsText={
+                search ? (loading ? "Searching..." : "No users found") : "Type to search"
+              }
             />
 
             {formData.shareType === "equal" ? (
@@ -279,7 +299,7 @@ const AddExpense = ({
             ) : (
               formData.persons.map((person, index) => (
                 <Box
-                  key={person.personId}
+                  key={person._id}
                   display="flex"
                   alignItems="center"
                   mb={1}
@@ -290,10 +310,10 @@ const AddExpense = ({
                   <TextField
                     label="Amount"
                     type="number"
-                    value={formData.amountDistribution[person.personId] || ""}
+                    value={formData.amountDistribution[person._id] || ""}
                     onChange={(e) =>
                       handleIndividualAmountChange(
-                        person.personId,
+                        person._id,
                         e.target.value
                       )
                     }
@@ -361,3 +381,33 @@ const AddExpense = ({
 };
 
 export default AddExpense;
+
+// Group
+
+// <FormControlLabel
+//               control={
+//                 <Checkbox
+//                   checked={grpExp}
+//                   onChange={handleCheckboxChangeGrpExp}
+//                   value={grpExp}
+//                 />
+//               }
+//               label="Group Expense"
+//             />
+
+//             <Autocomplete
+//               disabled={!grpExp}
+//               options={group}
+//               getOptionLabel={(option) => option.groupName}
+//               value={formData.group}
+//               onChange={handleAutocompleteChangeGroup}
+//               renderInput={(params) => (
+//                 <TextField
+//                   {...params}
+//                   label="Group"
+//                   placeholder="Select a group"
+//                   margin="normal"
+//                   fullWidth
+//                 />
+//               )}
+//             />
