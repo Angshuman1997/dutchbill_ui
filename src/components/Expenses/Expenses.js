@@ -1,107 +1,92 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Chip,
   Typography,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useSelector } from "react-redux";
-import { fetchExpense } from '../../api/apiFunc';
-import { toast } from 'react-toastify';
+import { fetchExpense } from "../../api/apiFunc";
+import "./Expenses.css";
+import { CircularProgress } from "@mui/material";
 
 const Expenses = () => {
-
-  const [filter, setFilter] = useState('');
   const [expenseData, setExpenseData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
 
   useEffect(() => {
-
     const fetchAndSetExpenseData = async () => {
-      try{
+      try {
         const result = await fetchExpense({ userId: userData.data._id });
-        if(result && result.status === 200) {
-          console.log('hi', result.data)
+        if (result && result.status === 200) {
           setExpenseData(result.data);
         } else {
-          toast.error("Failed to fetch expense data");
+          setError(true);
         }
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        toast.error("An error occurred while fetching expense data");
+        setError(true);
       }
     };
     fetchAndSetExpenseData();
   }, [userData]);
-  
-
-  const handleFilterChange = (event) => setFilter(event.target.value);
-
-  const filteredData = expenseData.filter(item => {
-    return filter === '' || item.expenseType === filter;
-  });
 
   return (
-    <div>
-      <div>Expenses</div>
+    <React.Fragment>
       {loading ? (
-        <Typography>Loading expenses...</Typography>
+        <div className="expense-message">
+          <CircularProgress color="inherit" />
+        </div>
+      ) : error ? (
+        <div className="expense-message">Something went wrong !</div>
       ) : expenseData.length === 0 ? (
-        <Typography>No expenses found</Typography>
+        <div className="expense-message">No data found</div>
       ) : (
-        <React.Fragment>
-          <div style={{ marginBottom: '16px' }}>
-            <FormControl fullWidth>
-              <InputLabel>Filter by Expense Type</InputLabel>
-              <Select
-                value={filter}
-                onChange={handleFilterChange}
-                label="Filter by Expense Type"
-                disabled={expenseData.length === 0}
-              >
-                <MenuItem value="">All</MenuItem>
-                {Array.from(new Set(expenseData.map(item => item.expenseType))).map(expenseType => (
-                  <MenuItem key={expenseType} value={expenseType}>{expenseType}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
-          {filteredData.map((item) => (
-            <Accordion key={item.expenseId}>
+        <div className="expense-content">
+          {expenseData.map((item) => (
+            <Accordion key={item.expenseId} sx={{
+              width: "35rem",
+              
+            }}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Chip
-                    label={item.type}
-                    color={item.type === 'pay' ? 'error' : 'success'}
-                  />
-                  <Typography>{item.expenseType}</Typography>
-                  <Typography>Status: {item.status}</Typography>
-                  <Typography>Amount: ${item.amount}</Typography>
-                </div>
+                <Chip
+                  label={item.type}
+                  color={item.type === "pay" ? "error" : "success"}
+                  sx={{
+                    width: "5rem",
+                    borderRadius: "0.5rem"
+                  }}
+                />
+                <Typography>{item.expenseType}</Typography>
+                <Typography>Status: {item.status}</Typography>
+                <Typography>Amount: {item.amount}/-</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>Expense ID: {item.expenseId}</Typography>
                 <Typography>Transaction Date: {item.trnscDate}</Typography>
-                <Typography>Complete Date: {item.trnscCompleteDate || 'N/A'}</Typography>
-                <Typography>Group ID: {item.groupId || 'N/A'}</Typography>
-                {item.ifOthersComment && <Typography>Comment: {item.ifOthersComment}</Typography>}
+                <Typography>
+                  Complete Date: {item.trnscCompleteDate || "N/A"}
+                </Typography>
+                <Typography>Group ID: {item.groupId || "N/A"}</Typography>
+                {item.ifOthersComment && (
+                  <Typography>Comment: {item.ifOthersComment}</Typography>
+                )}
                 {item.payTo && <Typography>Pay To: {item.payTo}</Typography>}
-                {item.receiveFrom && <Typography>Receive From: {item.receiveFrom}</Typography>}
+                {item.receiveFrom && (
+                  <Typography>Receive From: {item.receiveFrom}</Typography>
+                )}
               </AccordionDetails>
             </Accordion>
           ))}
-        </React.Fragment>
+        </div>
       )}
-    </div>
+    </React.Fragment>
   );
-}
+};
 
 export default Expenses;

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Tab from "../Tab/Tab";
 import "./SideBar.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setTabSelect } from "../../redux/actions/actionTypes";
 import { Button } from "@mui/material";
 
 const SideBar = ({ handleOpenAddExpense }) => {
   const dispatch = useDispatch();
-  const [selectedTab, setSelectedTab] = useState("Overview");
+  const tabSelect = useSelector((state) => state.tabSelect);
+  const [selectedTab, setSelectedTab] = useState(tabSelect);
 
   const handleTabClick = (tabLabel) => {
     setSelectedTab(tabLabel);

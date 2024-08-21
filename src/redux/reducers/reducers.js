@@ -8,7 +8,7 @@ import {
   } from '../actions/types';
   
   const initialState = {
-    tabSelect: 'Overview',
+    tabSelect: 'Summary',
     userData: {},
     value3: null,
     value4: null,

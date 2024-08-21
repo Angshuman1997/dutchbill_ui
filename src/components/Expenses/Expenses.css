@@ -1,0 +1,16 @@
+.expense-message {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #a1a1a1;
+  font-size: 2rem;
+}
+
+.expense-content {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  flex-direction: column;
+}
