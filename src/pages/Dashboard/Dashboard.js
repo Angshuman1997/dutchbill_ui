@@ -6,6 +6,7 @@ import AddExpense from "../../components/AddExpense/AddExpense";
 import "./Dashboard.css";
 import { toast } from "react-toastify";
 import { addExpense } from "../../api/apiFunc";
+import { useSelector } from "react-redux";
 
 // pass From API
 
@@ -26,8 +27,9 @@ const expenseTypes = [
 
 const Dashboard = () => {
   const [openAddExpense, setOpenAddExpense] = useState(false);
-  const [addExpenseData, setAddExpenseData] =  useState(null);
+  const [addExpenseData, setAddExpenseData] = useState(null);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const tabSelect = useSelector((state) => state.tabSelect);
 
   const handleOpenAddExpense = () => setOpenAddExpense(true);
   const handleCloseAddExpense = () => setOpenAddExpense(false);
@@ -42,7 +44,7 @@ const Dashboard = () => {
       if (addExpenseData) {
         try {
           const result = await addExpense(addExpenseData);
-          if(result.success) {
+          if (result.success) {
             toast.success(result.message);
           } else {
             toast.error(result.message);
@@ -82,8 +84,11 @@ const Dashboard = () => {
         <div className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
           <Sidebar handleOpenAddExpense={handleOpenAddExpense} />
         </div>
-        <div className="dashboard-content">
-          <DashBoardContent />
+        <div className="dashboard-content-layout">
+          <div className="dashboard-content-title">{tabSelect}</div>
+          <div className="dashboard-content">
+            <DashBoardContent />
+          </div>
         </div>
       </div>
       <AddExpense

@@ -17,9 +17,9 @@ const SideBar = ({ handleOpenAddExpense }) => {
   return (
     <div className="sidebar">
       <Tab
-        label="Overview"
-        active={selectedTab === "Overview"}
-        onClick={() => handleTabClick("Overview")}
+        label="Summary"
+        active={selectedTab === "Summary"}
+        onClick={() => handleTabClick("Summary")}
       />
       <Tab
         label="Expenses"

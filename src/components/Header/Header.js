@@ -31,9 +31,9 @@ const Header = () => {
             <Button
               variant="contained"
               sx={{
-                color: "#1050bf",
+                color: "#424447",
                 fontWeight: "bold",
-                borderColor: "#1050bf",
+                borderColor: "#424447",
                 borderWidth: "2px",
                 marginRight: "0.7rem",
                 borderRadius: "100px",
@@ -58,9 +58,9 @@ const Header = () => {
             <Button
               variant="contained"
               sx={{
-                color: "#1050bf",
+                color: "#424447",
                 fontWeight: "bold",
-                borderColor: "#1050bf",
+                borderColor: "#424447",
                 borderWidth: "2px",
                 borderRadius: "100px",
                 backgroundColor: "#ffffff",
@@ -87,9 +87,9 @@ const Header = () => {
           <Button
             variant="contained"
             sx={{
-              color: "#1050bf",
+              color: "#424447",
               fontWeight: "bold",
-              borderColor: "#1050bf",
+              borderColor: "#424447",
               borderWidth: "2px",
               borderRadius: "100px",
               backgroundColor: "#ffffff",

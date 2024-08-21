@@ -28,6 +28,7 @@ const Expenses = () => {
       try{
         const result = await fetchExpense({ userId: userData.data._id });
         if(result && result.status === 200) {
+          console.log('hi', result.data)
           setExpenseData(result.data);
         } else {
           toast.error("Failed to fetch expense data");

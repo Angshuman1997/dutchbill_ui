@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import OverView from "../../components/OverView/OverView";
+import Summary from "../../components/Summary/Summary";
 import Expenses from "../../components/Expenses/Expenses";
 import Groups from "../../components/Groups/Groups";
 import InstantCalculate from "../../components/InstantCalculate/InstantCalculate";
@@ -17,7 +17,7 @@ const DashBoardContent = () => {
       case "InstantCalculate":
         return <InstantCalculate />;
       default:
-        return <OverView />;
+        return <Summary />;
     }
   };
 

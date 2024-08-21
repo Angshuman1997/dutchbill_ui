@@ -141,3 +141,15 @@ export const fetchExpense = async (value) => {
     console.error("Error while fetching expense:", error);
   }
 };
+
+// Fetch expenses value = {userId: id}
+export const totalSummary = async (value) => {
+  try {
+    const response = await axios.post(`${API_URL}/expense/totalsummary`, value, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while fetching expense:", error);
+  }
+};
