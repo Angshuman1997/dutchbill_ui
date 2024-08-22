@@ -130,15 +130,11 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
   const isFormValid = () => {
     const { expenseType, persons, amount, shareType, amountDistribution } =
       formData;
-
-    // Check if expenseType and persons are selected
     if (!expenseType || !persons) return false;
 
     if (shareType === "equal") {
-      // For equal sharing, check if amount is greater than 0
       return amount > 0;
     } else {
-      // For unequal sharing, ensure each person has an amount assigned
       return (
         Object.keys(amountDistribution).length === persons.length &&
         Object.values(amountDistribution).every((amt) => amt > 0)
@@ -163,8 +159,8 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: { xs: "70%", sm: "50%", md: 400 },
-          backgroundColor: "rgba(255, 255, 255, 0.3)", // Adjust the alpha value for transparency
-          backdropFilter: "blur(10px)", // Adjust the blur amount
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
+          backdropFilter: "blur(10px)",
           borderRadius: "2rem",
           boxShadow: 24,
           padding: "0.5rem 1rem 2rem 2rem",
@@ -210,17 +206,17 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
             mb: 2,
             maxHeight: "calc(100vh - 200px)",
             "&::-webkit-scrollbar": {
-              width: "8px", // Width of the scrollbar
+              width: "8px",
             },
             "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f0f0f0", // Background color of the track
-              borderRadius: "10px", // Rounded corners for the track
+              backgroundColor: "#f0f0f0",
+              borderRadius: "10px",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888", // Color of the scrollbar thumb
-              borderRadius: "10px", // Rounded corners for the thumb
+              backgroundColor: "#888",
+              borderRadius: "10px",
               "&:hover": {
-                backgroundColor: "#555", // Darker color on hover
+                backgroundColor: "#555",
               },
             },
           }}
@@ -233,6 +229,12 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                     checked={formData.shareType === "equal"}
                     onChange={handleCheckboxChange}
                     value="equal"
+                    sx={{
+                      color: "#ffffff",
+                      "&.Mui-checked": {
+                        color: "#ffffff",
+                      },
+                    }}
                   />
                 }
                 label="Equal"
@@ -246,6 +248,12 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                     checked={formData.shareType === "unequal"}
                     onChange={handleCheckboxChange}
                     value="unequal"
+                    sx={{
+                      color: "#ffffff",
+                      "&.Mui-checked": {
+                        color: "#ffffff",
+                      },
+                    }}
                   />
                 }
                 label="Unequal"
@@ -265,6 +273,12 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               getOptionLabel={(option) => option.name}
               value={formData.persons}
               onChange={handleAutocompleteChangePerson}
+              sx={{
+                "& .MuiAutocomplete-popper": {
+                  background: "grey",
+                  color: "#ffffff"
+                }
+              }}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
@@ -299,19 +313,19 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                     ),
                   }}
                   InputLabelProps={{
-                    style: { color: "#ffffff" }, // Change label color
+                    style: { color: "#ffffff" },
                   }}
                   sx={{
                     "& input[type=number]": {
-                      "-moz-appearance": "textfield", // Hide buttons in Firefox
-                      "-webkit-appearance": "none", // Hide buttons in Chrome, Safari, Edge
+                      "-moz-appearance": "textfield",
+                      "-webkit-appearance": "none",
                       appearance: "textfield",
-                      margin: 0, // Removes any margin
+                      margin: 0,
                     },
                     "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
                       {
                         "-webkit-appearance": "none",
-                        margin: 0, // Removes any margin for the spin buttons
+                        margin: 0,
                       },
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
