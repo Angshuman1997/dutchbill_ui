@@ -112,7 +112,6 @@ const AddExpense = ({
   };
 
   const handleIndividualAmountChange = (_id, value) => {
-    console.log("hi", _id)
     const amount = parseFloat(value) || 0;
     setFormData((prev) => ({
       ...prev,
@@ -129,13 +128,15 @@ const AddExpense = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const tempFormData = {...formData};
+    delete tempFormData.amountDistribution[userData.data._id];
     const payLoadData = {
-      ...formData,
-      amount: Object.values(formData.amountDistribution).reduce(
+      ...tempFormData,
+      amount: Object.values(tempFormData.amountDistribution).reduce(
         (acc, curr) => acc + curr,
         0
       ),
-      expenseType: formData.expenseType.expenseType,
+      expenseType: tempFormData.expenseType.expenseType,
     };
 
     // if(!grpExp) {
@@ -270,12 +271,12 @@ const AddExpense = ({
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
-                      <>
+                      <React.Fragment>
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
                         {params.InputProps.endAdornment}
-                      </>
+                      </React.Fragment>
                     ),
                   }}
                 />
