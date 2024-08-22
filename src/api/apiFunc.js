@@ -118,10 +118,10 @@ export const addExpense = async (value) => {
   }
 };
 
-// Remove expense value = {expenseId: id}
+// Remove expense value = {userId: id, expenseId: id}
 export const removeExpense = async (value) => {
   try {
-    const response = await axios.delete(
+    const response = await axios.post(
       `${API_URL}/expense/removeexpense`,value, {headers}
     );
     return response.data;
@@ -146,6 +146,18 @@ export const fetchExpense = async (value) => {
 export const totalSummary = async (value) => {
   try {
     const response = await axios.post(`${API_URL}/expense/totalsummary`, value, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while fetching expense:", error);
+  }
+};
+
+// Payment Complete = {user: {_id, name}, expUser: {_id, name}, type}
+export const paymentComplete = async (value) => {
+  try {
+    const response = await axios.post(`${API_URL}/expense/expensecomplete`, value, {
       headers,
     });
     return response.data;

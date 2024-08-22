@@ -5,12 +5,16 @@ import {
   AccordionDetails,
   Chip,
   Typography,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useSelector } from "react-redux";
-import { fetchExpense } from "../../api/apiFunc";
+import { fetchExpense, removeExpense } from "../../api/apiFunc";
 import "./Expenses.css";
 import { CircularProgress } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import moment from "moment";
+import { toast } from "react-toastify";
 
 const Expenses = () => {
   const [expenseData, setExpenseData] = useState([]);
@@ -36,6 +40,18 @@ const Expenses = () => {
     fetchAndSetExpenseData();
   }, [userData]);
 
+  const deleteExpense = async (e, item) => {
+    e.stopPropagation();
+    const temp = expenseData.filter((i) => i.expenseId !== item.expenseId);
+    const deleteExpApi = await removeExpense({userId: userData.data._id, expenseId: item.expenseId});
+    if(deleteExpApi && deleteExpApi.status === 200) {
+      setExpenseData(temp);
+    } else{
+      toast.error("Failed to delete expense");
+    }
+    
+  };
+
   return (
     <React.Fragment>
       {loading ? (
@@ -49,36 +65,106 @@ const Expenses = () => {
       ) : (
         <div className="expense-content">
           {expenseData.map((item) => (
-            <Accordion key={item.expenseId} sx={{
-              width: "35rem",
-              
-            }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Accordion
+              key={item.expenseId}
+              sx={{
+                width: "35rem",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  "& .MuiAccordionSummary-content": {
+                    display: "flex",
+                    justifyContent: "space-around",
+                  },
+                }}
+              >
                 <Chip
                   label={item.type}
                   color={item.type === "pay" ? "error" : "success"}
                   sx={{
                     width: "5rem",
-                    borderRadius: "0.5rem"
+                    marginRight: "0.5rem",
                   }}
                 />
-                <Typography>{item.expenseType}</Typography>
-                <Typography>Status: {item.status}</Typography>
-                <Typography>Amount: {item.amount}/-</Typography>
+                <Chip
+                  label={`Amount => ${item.amount}`}
+                  sx={{
+                    width: "10rem",
+                    borderRadius: "0.5rem",
+                    backgroundColor: "#08889a",
+                    color: "black",
+                    marginRight: "0.5rem",
+                  }}
+                />
+                <Chip
+                  label={`Status => ${item.status}`}
+                  sx={{
+                    width: "10rem",
+                    borderRadius: "0.5rem",
+                    backgroundColor: "white",
+                    marginRight: "0.5rem",
+                    border: `2px solid ${
+                      item.status === "done" ? "green" : "red"
+                    }`,
+                    color: item.status === "done" ? "green" : "red",
+                  }}
+                />
+                <Button
+                  onClick={(e) => deleteExpense(e, item)}
+                  disabled={item.createdById !== userData.data._id}
+                  sx={{
+                    minWidth: 0,
+                    padding: 0,
+                    margin: 0,
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                    opacity: item.createdById !== userData.data._id ? 0 : 1,
+                  }}
+                >
+                  <DeleteIcon sx={{ color: "black" }} />
+                </Button>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>Expense ID: {item.expenseId}</Typography>
-                <Typography>Transaction Date: {item.trnscDate}</Typography>
                 <Typography>
-                  Complete Date: {item.trnscCompleteDate || "N/A"}
+                  <b>Expense On:</b>
+                  {` ${item.expenseType}`}
                 </Typography>
-                <Typography>Group ID: {item.groupId || "N/A"}</Typography>
-                {item.ifOthersComment && (
-                  <Typography>Comment: {item.ifOthersComment}</Typography>
+                {item.payTo && (
+                  <Typography>
+                    <b>Pay To:</b>
+                    {` ${item.payTo}`}
+                  </Typography>
                 )}
-                {item.payTo && <Typography>Pay To: {item.payTo}</Typography>}
                 {item.receiveFrom && (
-                  <Typography>Receive From: {item.receiveFrom}</Typography>
+                  <Typography>
+                    <b>Receive From:</b>
+                    {` ${item.receiveFrom}`}
+                  </Typography>
+                )}
+                <Typography>
+                  <b>Transaction Date:</b>
+                  {` ${moment(item.trnsc).format("YYYY-MM-DD")}`}
+                </Typography>
+                <Typography>
+                  <b>Transaction Complete Date:</b>
+                  {` ${
+                    item.trnscCompleteDate
+                      ? moment(item.trnscCompleteDate).format("YYYY-MM-DD")
+                      : "N/A"
+                  }`}{" "}
+                </Typography>
+                <Typography>
+                  <b>Group:</b>
+                  {` ${item.group ? item.group.groupName : "N/A"}`}
+                </Typography>
+                {item.ifOthersComment && (
+                  <Typography>
+                    <b>{"Comment ( Other Expense ):"}</b>
+                    {` ${item.ifOthersComment}`}
+                  </Typography>
                 )}
               </AccordionDetails>
             </Accordion>

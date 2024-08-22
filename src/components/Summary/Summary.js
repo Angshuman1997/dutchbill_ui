@@ -16,12 +16,11 @@ const Summary = () => {
       try {
         setLoading(true);
         const result = await totalSummary({ userId: userData.data._id });
-        setSumData(result.summary);
-        if (result.length === 0) {
-          setError(true);
+        if(result && result.status === 200) {
+          setSumData(result.summary);
         }
       } catch (err) {
-        setError("Failed to fetch summary data");
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -41,7 +40,7 @@ const Summary = () => {
       ) : error ? (
         <div className="summary-message">Something went wrong !</div>
       ) : sumData.length === 0 ? (
-        <div className="summary-message">No data found</div>
+        <div className="summary-message">No due transactions</div>
       ) : (
         <div className="summary-content">
           <SummaryPayBox data={sumData} user={userData.data} />

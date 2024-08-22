@@ -61,7 +61,7 @@ const Dashboard = () => {
   // Add an effect to handle initial sidebar state based on screen width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 640) {
         setSidebarOpen(false);
       } else {
         setSidebarOpen(true);

@@ -6,14 +6,14 @@ const Tab = ({ label, active, onClick }) => {
     <Button
       onClick={onClick}
       sx={{
-        backgroundColor: active ? 'white' : 'transparent',
-        color: active ? 'black' : 'white',
+        backgroundColor: 'transparent',
+        color: 'white',
         borderRadius: '8px',
         textTransform: 'none',
-        border: active ? '1px solid black' : 'none',
+        border: active ? '1px solid white' : 'none',
         transition: 'background-color 0.3s ease, color 0.3s ease',
         '&:hover': {
-          backgroundColor: active ? '#e0e0e0' : 'transparent',
+          backgroundColor: active ? '#6b6b6b' : 'transparent',
         },
       }}
     >
