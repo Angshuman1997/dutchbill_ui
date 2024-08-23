@@ -10,6 +10,7 @@ const Summary = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
+  const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
 
   useEffect(() => {
     const fetchTotalSummary = async () => {
@@ -29,7 +30,7 @@ const Summary = () => {
     if (userData?.data?._id) {
       fetchTotalSummary();
     }
-  }, [userData]);
+  }, [userData, sumExpApiToggle]);
 
   return (
     <React.Fragment>

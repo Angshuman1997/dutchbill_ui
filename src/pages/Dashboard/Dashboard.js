@@ -6,15 +6,10 @@ import AddExpense from "../../components/AddExpense/AddExpense";
 import "./Dashboard.css";
 import { toast } from "react-toastify";
 import { addExpense } from "../../api/apiFunc";
-import { useSelector } from "react-redux";
-
-// pass From API
-
-// const group = [
-//   { groupName: "BTM Team", groupId: "1234" },
-//   { groupName: "School", groupId: "0987" },
-//   { groupName: "College", groupId: "5637" },
-// ];
+import { useSelector, useDispatch } from "react-redux";
+import { Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { setTabSelect } from "../../redux/actions/actionTypes";
 
 const expenseTypes = [
   { expenseType: "Food" },
@@ -26,18 +21,16 @@ const expenseTypes = [
 ];
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
   const [openAddExpense, setOpenAddExpense] = useState(false);
   const [addExpenseData, setAddExpenseData] = useState(null);
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(true);
   const tabSelect = useSelector((state) => state.tabSelect);
 
   const handleOpenAddExpense = () => setOpenAddExpense(true);
   const handleCloseAddExpense = () => setOpenAddExpense(false);
   const handleDataAddExpense = (data) => setAddExpenseData(data);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
 
   useEffect(() => {
     const addExpenseAsync = async () => {
@@ -61,10 +54,10 @@ const Dashboard = () => {
   // Add an effect to handle initial sidebar state based on screen width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 640) {
-        setSidebarOpen(false);
+      if (window.innerWidth < 768) {
+        setShowSidebar(false);
       } else {
-        setSidebarOpen(true);
+        setShowSidebar(true);
       }
     };
 
@@ -78,12 +71,11 @@ const Dashboard = () => {
     <div className="dashboard-layout">
       <Header />
       <div className="dashboard-container">
-        <button className="toggle-button" onClick={toggleSidebar}>
-          {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-        </button>
-        <div className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
-          <Sidebar handleOpenAddExpense={handleOpenAddExpense} />
-        </div>
+        {showSidebar && (
+          <div className={`sidebar open`}>
+            <Sidebar handleOpenAddExpense={handleOpenAddExpense} />
+          </div>
+        )}
         <div className="dashboard-content-layout">
           <div className="dashboard-content-title">{tabSelect}</div>
           <div className="dashboard-content">
@@ -91,11 +83,70 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {!showSidebar && (
+        <div className="btns-small-screen">
+          <Button
+            onClick={() => dispatch(setTabSelect("Summary"))}
+            sx={{
+              color: "#ffffff",
+              background: "transparent",
+              border: "2px solid white",
+              borderRadius: "2rem",
+              width: "6rem",
+              height: "2.5rem",
+              fontSize: "0.8rem",
+              "&:hover": {
+                color: "#ffffff",
+                background: "transparent",
+                border: "2px solid white",
+                borderRadius: "2rem",
+              },
+            }}
+          >
+            Home
+          </Button>
+          <Button
+            onClick={handleOpenAddExpense}
+            sx={{
+              background: "#ffffff",
+              borderRadius: "5rem",
+              width: "2rem",
+              height: "4rem",
+              color: "black",
+              "&:hover": {
+                background: "#ffffff",
+                borderRadius: "5rem",
+              },
+            }}
+          >
+            <AddIcon />
+          </Button>
+          <Button
+            onClick={() => dispatch(setTabSelect("Expenses"))}
+            sx={{
+              color: "#ffffff",
+              background: "transparent",
+              border: "2px solid white",
+              borderRadius: "2rem",
+              width: "6rem",
+              height: "2.5rem",
+              fontSize: "0.8rem",
+              "&:hover": {
+                color: "#ffffff",
+                background: "transparent",
+                border: "2px solid white",
+                borderRadius: "2rem",
+              },
+            }}
+          >
+            Expenses
+          </Button>
+        </div>
+      )}
       <AddExpense
         open={openAddExpense}
         onClose={handleCloseAddExpense}
         expenseTypes={expenseTypes}
-        // group={group}
         addExpense={handleDataAddExpense}
       />
     </div>

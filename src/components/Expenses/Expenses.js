@@ -21,6 +21,7 @@ const Expenses = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
+  const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
 
   useEffect(() => {
     const fetchAndSetExpenseData = async () => {
@@ -38,18 +39,20 @@ const Expenses = () => {
       }
     };
     fetchAndSetExpenseData();
-  }, [userData]);
+  }, [userData, sumExpApiToggle]);
 
   const deleteExpense = async (e, item) => {
     e.stopPropagation();
     const temp = expenseData.filter((i) => i.expenseId !== item.expenseId);
-    const deleteExpApi = await removeExpense({userId: userData.data._id, expenseId: item.expenseId});
-    if(deleteExpApi && deleteExpApi.status === 200) {
+    const deleteExpApi = await removeExpense({
+      userId: userData.data._id,
+      expenseId: item.expenseId,
+    });
+    if (deleteExpApi && deleteExpApi.status === 200) {
       setExpenseData(temp);
-    } else{
+    } else {
       toast.error("Failed to delete expense");
     }
-    
   };
 
   return (
@@ -154,11 +157,7 @@ const Expenses = () => {
                     item.trnscCompleteDate
                       ? moment(item.trnscCompleteDate).format("YYYY-MM-DD")
                       : "N/A"
-                  }`}{" "}
-                </Typography>
-                <Typography>
-                  <b>Group:</b>
-                  {` ${item.group ? item.group.groupName : "N/A"}`}
+                  }`}
                 </Typography>
                 {item.ifOthersComment && (
                   <Typography>

@@ -57,7 +57,7 @@
 }
 
 .dashboard-content::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
 
 .dashboard-content::-webkit-scrollbar-thumb {
@@ -78,7 +78,7 @@
   font-size: 24px;
   font-weight: 500;
   background: transparent;
-  color: white;
+  color: #ffffff;
   font-family: sans-serif;
   padding-left: 0.5rem;
 }
@@ -90,10 +90,22 @@
   background: transparent;
 }
 
+.btns-small-screen {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
 /* Media query for smaller screens */
-@media (max-width: 768px) {
+@media (max-width < 768px) {
   .dashboard-container {
     flex-direction: column;
+  }
+
+  .dashboard-content-layout {
+    padding: 0.5rem 0.5rem;
   }
 
   .sidebar {

@@ -2,7 +2,7 @@
 import { 
     TAB_SELECT, 
     USER_DATA, 
-    SET_VALUE_3, 
+    SUM_EXP_API_TOGGLE, 
     SET_VALUE_4, 
     SET_VALUE_5 
   } from '../actions/types';
@@ -10,7 +10,7 @@ import {
   const initialState = {
     tabSelect: 'Summary',
     userData: {},
-    value3: null,
+    sumExpApiToggle: false,
     value4: null,
     value5: null,
   };
@@ -27,7 +27,7 @@ import {
           ...state,
           userData: action.payload,
         };
-      case SET_VALUE_3:
+      case SUM_EXP_API_TOGGLE:
         return {
           ...state,
           value3: action.payload,

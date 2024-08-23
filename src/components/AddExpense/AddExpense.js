@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getAllUser } from "../../api/apiFunc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSumExpApiToggle } from "../../redux/actions/actionTypes";
 
 const dataFormate = (user) => {
   return {
@@ -29,7 +30,9 @@ const dataFormate = (user) => {
 };
 
 const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
+  const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
 
   const [formData, setFormData] = useState(dataFormate(userData.data));
   const [search, setSearch] = useState("");
@@ -40,7 +43,12 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
   useEffect(() => {
     if (search && openAutocomplete) {
       setLoading(true);
-      getAllUser({ userId: userData.data._id, search: search })
+      getAllUser({
+        userId: userData.data._id,
+        search: search,
+        fetchType: "search",
+        alreadySelectedIds: formData.persons.map((i) => i._id),
+      })
         .then((result) => {
           if (result.length > 0) {
             setPersons(result);
@@ -54,8 +62,11 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
         })
         .finally(() => {
           setLoading(false);
+          setSearch("");
         });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, openAutocomplete, userData]);
 
   useEffect(() => {
@@ -125,6 +136,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
     addExpense(payLoadData);
     resetForm();
     onClose();
+    dispatch(setSumExpApiToggle(!sumExpApiToggle))
   };
 
   const isFormValid = () => {
@@ -160,7 +172,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
           transform: "translate(-50%, -50%)",
           width: { xs: "70%", sm: "50%", md: 400 },
           backgroundColor: "rgba(255, 255, 255, 0.3)",
-          backdropFilter: "blur(10px)",
+          backdropFilter: "blur(15px)",
           borderRadius: "2rem",
           boxShadow: 24,
           padding: "0.5rem 1rem 2rem 2rem",
@@ -240,6 +252,9 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                 label="Equal"
                 sx={{
                   color: "#ffffff",
+                  "& .MuiTypography-root": {
+                    fontWeight: "bold",
+                  },
                 }}
               />
               <FormControlLabel
@@ -259,6 +274,9 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                 label="Unequal"
                 sx={{
                   color: "#ffffff",
+                  "& .MuiTypography-root": {
+                    fontWeight: "bold",
+                  },
                 }}
               />
             </Box>
@@ -266,18 +284,30 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               multiple
               open={openAutocomplete}
               onOpen={() => setOpenAutocomplete(true)}
-              onClose={() => setOpenAutocomplete(false)}
+              onClose={() => {
+                setOpenAutocomplete(false);
+                setSearch("");
+                setPersons([]);
+              }}
               onInputChange={(event, value) => setSearch(value)}
               options={persons}
-              loading={loading}
               getOptionLabel={(option) => option.name}
               value={formData.persons}
               onChange={handleAutocompleteChangePerson}
-              sx={{
-                "& .MuiAutocomplete-popper": {
-                  background: "grey",
-                  color: "#ffffff"
-                }
+              renderOption={(props, option) => {
+                const { name, username } = option;
+                return (
+                  <span
+                    {...props}
+                    style={{
+                      background: "#393737",
+                      color: "#ffffff",
+                      borderBottom: "1px solid #ffffff",
+                    }}
+                  >
+                    {`${name} (${username})`}
+                  </span>
+                );
               }}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
@@ -298,7 +328,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Persons"
+                  label="Persons ( Type name to search )"
                   margin="normal"
                   fullWidth
                   InputProps={{
@@ -347,13 +377,6 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                   }}
                 />
               )}
-              noOptionsText={
-                search
-                  ? loading
-                    ? "Searching..."
-                    : "No users found"
-                  : "Type to search"
-              }
             />
 
             {formData.shareType === "equal" ? (
@@ -468,15 +491,22 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               getOptionLabel={(option) => option.expenseType}
               value={formData.expenseType}
               onChange={handleAutocompleteChangeExpenseType}
-              sx={{
-                "& .MuiAutocomplete-popper": {
-                  background: "red !important",
-                },
+              renderOption={(props, option) => {
+                const { expenseType } = option;
+                return (
+                  <span
+                    {...props}
+                    style={{ background: "#393737", color: "white" }}
+                  >
+                    {`${expenseType}`}
+                  </span>
+                );
               }}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Expense Type"
+                  onKeyDown={(e) => e.preventDefault()}
                   placeholder="Select an expense type"
                   margin="normal"
                   fullWidth

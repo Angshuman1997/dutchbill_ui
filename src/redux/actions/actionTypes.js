@@ -1,7 +1,7 @@
 import { 
     TAB_SELECT, 
     USER_DATA, 
-    SET_VALUE_3, 
+    SUM_EXP_API_TOGGLE, 
     SET_VALUE_4, 
     SET_VALUE_5 
   } from './types';
@@ -16,8 +16,8 @@ import {
     payload: value,
   });
   
-  export const setValue3 = (value) => ({
-    type: SET_VALUE_3,
+  export const setSumExpApiToggle = (value) => ({
+    type: SUM_EXP_API_TOGGLE,
     payload: value,
   });
   

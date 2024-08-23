@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ul {
+  padding: 0 !important;
+} */
+
+.MuiAutocomplete-noOptions {
+  background: #393737 !important;
+  padding: 1rem 0.6rem !important;
+}
+
+.MuiAutocomplete-listbox {
+  padding: 1rem 0.6rem !important;
+  background: #393737 !important;
+}

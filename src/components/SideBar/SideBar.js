@@ -29,9 +29,15 @@ const SideBar = ({ handleOpenAddExpense }) => {
       />
       <Button
         variant="contained"
-        color="primary"
-        onClick={()=>handleOpenAddExpense()}
-        style={{ marginTop: "16px" }}
+        onClick={() => handleOpenAddExpense()}
+        sx={{
+          marginTop: "16px",
+          color: "black",
+          background: "white",
+          "&:hover": {
+            background: "#c7c7c7",
+          },
+        }}
       >
         Add Expenses
       </Button>

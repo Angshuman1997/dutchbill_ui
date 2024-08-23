@@ -50,7 +50,7 @@ export const getUser = async (value) => {
 // Get all users
 export const getAllUser = async (value) => {
   try {
-    const response = await axios.get(`${API_URL}/user/allusers`, value, {
+    const response = await axios.post(`${API_URL}/user/allusers`, value, {
       headers,
     });
     return response.data;
