@@ -7,7 +7,10 @@ import "./Dashboard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { setTabSelect } from "../../redux/actions/actionTypes";
+import { setTabSelect, setUserData } from "../../redux/actions/actionTypes";
+import { fetchUserCreds } from "../../api/apiFunc";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const expenseTypes = [
   { expenseType: "Food" },
@@ -20,6 +23,7 @@ const expenseTypes = [
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [openAddExpense, setOpenAddExpense] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -42,6 +46,32 @@ const Dashboard = () => {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const refreshAction = async () => {
+      let flag = true;
+      const sessionActiveToken = localStorage.getItem("sessionToken");
+      const sessionActiveEmail = localStorage.getItem("userEmail");
+      if (sessionActiveToken && sessionActiveEmail) {
+        const fetchUser = await fetchUserCreds({
+          userEmail: sessionActiveEmail,
+        });
+        if (fetchUser && fetchUser.status === 200) {
+          flag = false;
+          dispatch(setUserData(fetchUser));
+        }
+      }
+
+      if (flag) {
+        localStorage.setItem("sessionToken", "");
+        localStorage.setItem("userEmail", "");
+        toast.info("Session ended please, Re-Login");
+        navigate("/");
+      }
+    };
+    refreshAction();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

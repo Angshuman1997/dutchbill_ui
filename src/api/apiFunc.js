@@ -2,19 +2,15 @@ import axios from "axios";
 
 const API_URL = "https://dutchbill.vercel.app/api";
 
-const headers = {
-  "Content-Type": "application/json",
-  "Authorization": "Bearer "+ localStorage.getItem('sessionToken')
-};
-
 // Add new user data { firebaseName, appUserName, username, emailId }
 export const createUser = async (value) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/user/createuser`,
-      value,
-      { headers }
-    );
+    const response = await axios.post(`${API_URL}/user/createuser`, value, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error posting user data:", error);
@@ -24,7 +20,12 @@ export const createUser = async (value) => {
 // Search User { search, userId, fetchType, alreadySelectedIds }
 export const searchUser = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/user/searchuser`, value , {headers});
+    const response = await axios.post(`${API_URL}/user/searchuser`, value, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error getting all user data:", error);
@@ -35,7 +36,10 @@ export const searchUser = async (value) => {
 export const fetchUserCreds = async (value) => {
   try {
     const response = await axios.post(`${API_URL}/user/fetchuser`, value, {
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
     });
     return response.data;
   } catch (error) {
@@ -43,12 +47,14 @@ export const fetchUserCreds = async (value) => {
   }
 };
 
-
 // Update user - {name, userId}
 export const updateUser = async (value) => {
   try {
     const response = await axios.put(`${API_URL}/user/updateuser`, value, {
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
     });
     return response.data;
   } catch (error) {
@@ -60,7 +66,10 @@ export const updateUser = async (value) => {
 export const deleteUser = async (value) => {
   try {
     const response = await axios.post(`${API_URL}/user/deleteuser`, value, {
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
     });
     return response.data;
   } catch (error) {
@@ -73,7 +82,10 @@ export const deleteUser = async (value) => {
 export const addExpense = async (value) => {
   try {
     const response = await axios.post(`${API_URL}/expense/addexpense`, value, {
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+      },
     });
     return response.data;
   } catch (error) {
@@ -85,7 +97,14 @@ export const addExpense = async (value) => {
 export const removeExpense = async (value) => {
   try {
     const response = await axios.post(
-      `${API_URL}/expense/removeexpense`,value, {headers}
+      `${API_URL}/expense/removeexpense`,
+      value,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -96,9 +115,16 @@ export const removeExpense = async (value) => {
 // Fetch expenses value = {userId: id}
 export const fetchExpense = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/expense/fetchexpense`, value, {
-      headers,
-    });
+    const response = await axios.post(
+      `${API_URL}/expense/fetchexpense`,
+      value,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error while fetching expense:", error);
@@ -108,9 +134,16 @@ export const fetchExpense = async (value) => {
 // Fetch expenses value = {userId: id}
 export const totalSummary = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/expense/totalsummary`, value, {
-      headers,
-    });
+    const response = await axios.post(
+      `${API_URL}/expense/totalsummary`,
+      value,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error while fetching expense:", error);
@@ -120,9 +153,16 @@ export const totalSummary = async (value) => {
 // Payment Complete = {user: {_id, name}, expUser: {_id, name}, type}
 export const paymentComplete = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/expense/expensecomplete`, value, {
-      headers,
-    });
+    const response = await axios.post(
+      `${API_URL}/expense/expensecomplete`,
+      value,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("sessionToken"),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error while fetching expense:", error);

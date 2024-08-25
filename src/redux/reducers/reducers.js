@@ -30,7 +30,7 @@ import {
       case SUM_EXP_API_TOGGLE:
         return {
           ...state,
-          value3: action.payload,
+          sumExpApiToggle: action.payload,
         };
       case SET_VALUE_4:
         return {

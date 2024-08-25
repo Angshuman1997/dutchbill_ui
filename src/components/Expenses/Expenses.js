@@ -15,8 +15,11 @@ import { CircularProgress } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setSumExpApiToggle } from "../../redux/actions/actionTypes";
 
 const Expenses = () => {
+  const dispatch = useDispatch();
   const [expenseData, setExpenseData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -27,7 +30,7 @@ const Expenses = () => {
     const fetchAndSetExpenseData = async () => {
       try {
         setLoading(true);
-        const result = await fetchExpense({ userId: userData.data._id });
+        const result = await fetchExpense({ userId: userData?.data?._id });
         if (result && result.status === 200) {
           setExpenseData(result.data);
         }
@@ -50,6 +53,7 @@ const Expenses = () => {
     });
     if (deleteExpApi && deleteExpApi.status === 200) {
       setExpenseData(temp);
+      dispatch(setSumExpApiToggle(!sumExpApiToggle));
     } else {
       toast.error("Failed to delete expense");
     }
@@ -116,7 +120,7 @@ const Expenses = () => {
                 />
                 <Button
                   onClick={(e) => deleteExpense(e, item)}
-                  disabled={item.createdById !== userData.data._id}
+                  disabled={item.createdById !== userData?.data?._id}
                   sx={{
                     minWidth: 0,
                     padding: 0,
@@ -124,7 +128,7 @@ const Expenses = () => {
                     "&:hover": {
                       backgroundColor: "rgba(0, 0, 0, 0.1)",
                     },
-                    opacity: item.createdById !== userData.data._id ? 0 : 1,
+                    opacity: item.createdById !== userData?.data?._id ? 0 : 1,
                   }}
                 >
                   <DeleteIcon sx={{ color: "black" }} />

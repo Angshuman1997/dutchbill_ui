@@ -16,7 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { searchUser, addExpense } from "../../api/apiFunc";
 import { useDispatch, useSelector } from "react-redux";
 import { setSumExpApiToggle } from "../../redux/actions/actionTypes";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
 const dataFormate = (user) => {
   return {
@@ -41,17 +41,13 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
   const [loading, setLoading] = useState(false);
   const [openAutocomplete, setOpenAutocomplete] = useState(false);
   const [apiStatus, setApiStatus] = useState("notstart");
+  const [includeMe, setIncludeMe] = useState(true);
 
   useEffect(()=>{
-    if(apiStatus === "done") {
-      resetForm();
-      onClose();
-      dispatch(setSumExpApiToggle(!sumExpApiToggle));
-      setApiStatus("notstart");
+    if(formData.shareType === 'unequal') {
+      setIncludeMe(false);
     }
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiStatus])
+  }, [formData.shareType])
 
   useEffect(() => {
     if (search && openAutocomplete) {
@@ -84,7 +80,7 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
 
   useEffect(() => {
     if (formData.shareType === "equal" && formData.persons.length > 0) {
-      const equalAmount = formData.amount / formData.persons.length;
+      const equalAmount = Math.ceil(formData.amount / (formData.persons.length + (includeMe ? 1 : 0)));
       const personsWithAmount = formData.persons.reduce((acc, person) => {
         acc[person._id] = equalAmount;
         return acc;
@@ -94,6 +90,7 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
         amountDistribution: personsWithAmount,
       }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.amount, formData.shareType, formData.persons]);
 
   const handleChange = (event) => {
@@ -111,6 +108,10 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
 
   const handleCheckboxChange = (event) => {
     setFormData((prev) => ({ ...prev, shareType: event.target.value }));
+  };
+
+  const handleCheckboxChangeIncludeMe = (event) => {
+    setIncludeMe((prev) => !prev);
   };
 
   const handleAmountChange = (event) => {
@@ -137,7 +138,6 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
     event.preventDefault();
     setApiStatus("loading");
     const tempFormData = { ...formData };
-    delete tempFormData.amountDistribution[userData.data._id];
     const payLoadData = {
       ...tempFormData,
       amount: Object.values(tempFormData.amountDistribution).reduce(
@@ -145,6 +145,7 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
         0
       ),
       expenseType: tempFormData.expenseType.expenseType,
+      paidUserIncluded: includeMe,
     };
 
     try {
@@ -157,7 +158,10 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setApiStatus("done");
+      dispatch(setSumExpApiToggle(!sumExpApiToggle));
+      setApiStatus("notstart");
+      resetForm();
+      onClose();
     }
   };
 
@@ -302,6 +306,29 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
                 }}
               />
             </Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={includeMe}
+                  disabled={formData.shareType === "unequal"}
+                  onChange={handleCheckboxChangeIncludeMe}
+                  value={includeMe}
+                  sx={{
+                    color: "#ffffff",
+                    "&.Mui-checked": {
+                      color: "#ffffff",
+                    },
+                  }}
+                />
+              }
+              label="Include Me ( Equal )"
+              sx={{
+                color: "#ffffff",
+                "& .MuiTypography-root": {
+                  fontWeight: "bold",
+                },
+              }}
+            />
             <Autocomplete
               multiple
               open={openAutocomplete}
@@ -455,7 +482,7 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
               formData.persons.map((person, index) => (
                 <Box key={person._id} display="flex" alignItems="center" mb={1}>
                   <TextField
-                    label={`Amount Spent On ${person.name}`}
+                    label={`Amount Spent On ${person.appUserName}`}
                     type="number"
                     value={formData.amountDistribution[person._id] || ""}
                     onChange={(e) =>
@@ -651,7 +678,11 @@ const AddExpense = ({ open, onClose, expenseTypes }) => {
               },
             }}
           >
-            {apiStatus === "loading" ? <CircularProgress size={10} sx={{ color: 'white' }} /> : "Submit "}
+            {apiStatus === "loading" ? (
+              <CircularProgress size={15} sx={{ color: "white" }} />
+            ) : (
+              "Submit "
+            )}
           </Button>
         </Box>
       </Box>

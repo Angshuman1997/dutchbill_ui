@@ -3,22 +3,31 @@ import "./Header.css";
 import { Button } from "@mui/material";
 import LoginModal from "../../pages/Login/LoginModal";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUserData } from "../../redux/actions/actionTypes";
 import LogoComponent from "../LogoComponent/LogoComponent";
+import { signOut } from "firebase/auth";
+import { auth } from "../../auth/firebaseConfig";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const handleLogin = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleLogout = () => {
-    dispatch(setUserData({}));
-    navigate('/');
-  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Successfully logged out.");
+      localStorage.setItem("sessionToken", "");
+      localStorage.setItem("userEmail", "");
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+      console.error("Logout Error:", error);
+    }
+  };
 
   return (
     <div className="header-main">
@@ -26,10 +35,11 @@ const Header = () => {
         <LogoComponent />
       </div>
       <div style={{ marginRight: "1rem" }}>
-        {location.pathname !== '/dashboard' ? (
+        {location.pathname !== "/dashboard" ? (
           <React.Fragment>
             <Button
               variant="contained"
+              disabled={true}
               sx={{
                 color: "#0d0c0b",
                 fontWeight: "bold",

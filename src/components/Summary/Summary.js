@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from "react";
 import SummaryPayBox from "./SummaryPayBox";
-import { totalSummary } from "../../api/apiFunc";
-import { useSelector } from "react-redux";
+import { totalSummary, paymentComplete } from "../../api/apiFunc";
+import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import { toast } from "react-toastify";
+import { setSumExpApiToggle } from "../../redux/actions/actionTypes";
 import "./Summary.css";
+import PaymentCompleteModal from "../PaymentCompleteModal/PaymentCompleteModal";
 
 const Summary = () => {
+  const dispatch = useDispatch();
   const [sumData, setSumData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
   const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
+  const [paymentModal, setPaymentModal] = useState(null);
 
-  console.log(userData)
+  const handlePayment = async () =>{
+    const paymentApi = await paymentComplete(paymentModal);
+    if(paymentApi && paymentApi.status === 200) {
+      dispatch(setSumExpApiToggle(!sumExpApiToggle));
+      toast.success(paymentApi.message);
+    } else {
+      toast.error(paymentApi.message);
+    }
+    setPaymentModal(null);
+  };
+
+  const handlePaymentModal = (value) => {
+    setPaymentModal(value);
+  }
 
   useEffect(() => {
     const fetchTotalSummary = async () => {
@@ -47,9 +65,10 @@ const Summary = () => {
         <div className="summary-message">No due transactions</div>
       ) : (
         <div className="summary-content">
-          <SummaryPayBox data={sumData} user={userData.data} />
+          <SummaryPayBox data={sumData} user={userData.data} handlePaymentModal={handlePaymentModal}/>
         </div>
       )}
+      <PaymentCompleteModal open={paymentModal ? true : false} handleClose={()=>setPaymentModal(null)} handlePayment={handlePayment}/>
     </React.Fragment>
   );
 };
