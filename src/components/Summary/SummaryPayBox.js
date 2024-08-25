@@ -7,12 +7,12 @@ export default function SummaryPayBox({ data, user, handlePaymentModal }) {
     <React.Fragment>
       {data.map((i, index) => (
         <button
-          onClick={() =>
+          onClick={() =>i.type === "receive" ?
             handlePaymentModal({
               user: { _id: user._id, name: user.appUserName },
               expUser: { _id: i._id, name: i.appUserName },
               type: i.type
-            })
+            }) : {}
           }
           key={index}
           className={`summary-btn ${
