@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 
 const Expenses = () => {
   const [expenseData, setExpenseData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
   const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
@@ -26,16 +26,16 @@ const Expenses = () => {
   useEffect(() => {
     const fetchAndSetExpenseData = async () => {
       try {
+        setLoading(true);
         const result = await fetchExpense({ userId: userData.data._id });
         if (result && result.status === 200) {
           setExpenseData(result.data);
-        } else {
-          setError(true);
         }
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
+        console.error(error)
         setError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchAndSetExpenseData();

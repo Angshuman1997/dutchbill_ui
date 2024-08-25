@@ -4,8 +4,6 @@ import Sidebar from "../../components/SideBar/SideBar";
 import DashBoardContent from "./DashBoardContent";
 import AddExpense from "../../components/AddExpense/AddExpense";
 import "./Dashboard.css";
-import { toast } from "react-toastify";
-import { addExpense } from "../../api/apiFunc";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,32 +22,11 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const [openAddExpense, setOpenAddExpense] = useState(false);
-  const [addExpenseData, setAddExpenseData] = useState(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const tabSelect = useSelector((state) => state.tabSelect);
 
   const handleOpenAddExpense = () => setOpenAddExpense(true);
   const handleCloseAddExpense = () => setOpenAddExpense(false);
-  const handleDataAddExpense = (data) => setAddExpenseData(data);
-
-  useEffect(() => {
-    const addExpenseAsync = async () => {
-      if (addExpenseData) {
-        try {
-          const result = await addExpense(addExpenseData);
-          if (result.success) {
-            toast.success(result.message);
-          } else {
-            toast.error(result.message);
-          }
-        } catch (error) {
-          toast.error(error.message);
-        }
-      }
-    };
-    addExpenseAsync();
-    setAddExpenseData(null);
-  }, [addExpenseData]);
 
   // Add an effect to handle initial sidebar state based on screen width
   useEffect(() => {
@@ -147,7 +124,6 @@ const Dashboard = () => {
         open={openAddExpense}
         onClose={handleCloseAddExpense}
         expenseTypes={expenseTypes}
-        addExpense={handleDataAddExpense}
       />
     </div>
   );

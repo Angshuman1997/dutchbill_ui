@@ -20,7 +20,7 @@ export default function SummaryPayBox({ data, user }) {
             }}
           />
           <div className="summary-content-layout">
-            <div className="summary-content-name">{`${i.name}`}</div>
+            <div className="summary-content-name">{`${i.appUserName}`}</div>
             <div className="summary-content-amount">{`${Math.abs(i.amount)}/-`}</div>
           </div>
         </button>

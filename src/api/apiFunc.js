@@ -4,19 +4,15 @@ const API_URL = "https://dutchbill.vercel.app/api";
 
 const headers = {
   "Content-Type": "application/json",
+  "Authorization": "Bearer "+ localStorage.getItem('sessionToken')
 };
 
-// Add new user data
-export const addNewUser = async (userData) => {
+// Add new user data { firebaseName, appUserName, username, emailId }
+export const createUser = async (value) => {
   try {
     const response = await axios.post(
-      `${API_URL}/user/create`,
-      {
-        name: userData.name,
-        username: userData.username,
-        password: userData.password,
-        emailId: userData.emailId,
-      },
+      `${API_URL}/user/createuser`,
+      value,
       { headers }
     );
     return response.data;
@@ -25,20 +21,20 @@ export const addNewUser = async (userData) => {
   }
 };
 
-// Get all users
-export const allUsers = async () => {
+// Search User { search, userId, fetchType, alreadySelectedIds }
+export const searchUser = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/user`, {});
+    const response = await axios.post(`${API_URL}/user/searchuser`, value , {headers});
     return response.data;
   } catch (error) {
     console.error("Error getting all user data:", error);
   }
 };
 
-// Get user
-export const getUser = async (value) => {
+// Fetch user creds if exists {userEmail}
+export const fetchUserCreds = async (value) => {
   try {
-    const response = await axios.post(`${API_URL}/user/singleuser`, value, {
+    const response = await axios.post(`${API_URL}/user/fetchuser`, value, {
       headers,
     });
     return response.data;
@@ -47,22 +43,11 @@ export const getUser = async (value) => {
   }
 };
 
-// Get all users
-export const getAllUser = async (value) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/allusers`, value, {
-      headers,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error getting user data:", error);
-  }
-};
 
-// Update user - name or password - value -> {password: password, name: name} or any one, also formType
+// Update user - {name, userId}
 export const updateUser = async (value) => {
   try {
-    const response = await axios.put(`${API_URL}/user/update`, value, {
+    const response = await axios.put(`${API_URL}/user/updateuser`, value, {
       headers,
     });
     return response.data;
@@ -71,37 +56,15 @@ export const updateUser = async (value) => {
   }
 };
 
-// Delete user
-export const deleteUser = async (userId) => {
+// Delete user - {userId}
+export const deleteUser = async (value) => {
   try {
-    const response = await axios.delete(`${API_URL}/user/${userId}`, {});
+    const response = await axios.post(`${API_URL}/user/deleteuser`, value, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error("Error deletion user data:", error);
-  }
-};
-
-// Check Existing User
-export const checkExistingUser = async (value) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/check`, value, {
-      headers,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error while checking existing user:", error);
-  }
-};
-
-// OTP Action
-export const otpActionUser = async (value) => {
-  try {
-    const response = await axios.post(`${API_URL}/user/otp`, value, {
-      headers,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error while checking existing user:", error);
   }
 };
 

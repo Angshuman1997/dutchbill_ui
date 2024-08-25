@@ -7,10 +7,12 @@ import "./Summary.css";
 
 const Summary = () => {
   const [sumData, setSumData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const userData = useSelector((state) => state.userData);
   const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
+
+  console.log(userData)
 
   useEffect(() => {
     const fetchTotalSummary = async () => {
@@ -20,7 +22,8 @@ const Summary = () => {
         if(result && result.status === 200) {
           setSumData(result.summary);
         }
-      } catch (err) {
+      } catch (error) {
+        console.error(error)
         setError(true);
       } finally {
         setLoading(false);

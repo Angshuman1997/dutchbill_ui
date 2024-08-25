@@ -13,9 +13,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { getAllUser } from "../../api/apiFunc";
+import { searchUser, addExpense } from "../../api/apiFunc";
 import { useDispatch, useSelector } from "react-redux";
 import { setSumExpApiToggle } from "../../redux/actions/actionTypes";
+import { toast } from "react-toastify"; 
 
 const dataFormate = (user) => {
   return {
@@ -29,7 +30,7 @@ const dataFormate = (user) => {
   };
 };
 
-const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
+const AddExpense = ({ open, onClose, expenseTypes }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const sumExpApiToggle = useSelector((state) => state.sumExpApiToggle);
@@ -39,11 +40,23 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
   const [persons, setPersons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openAutocomplete, setOpenAutocomplete] = useState(false);
+  const [apiStatus, setApiStatus] = useState("notstart");
+
+  useEffect(()=>{
+    if(apiStatus === "done") {
+      resetForm();
+      onClose();
+      dispatch(setSumExpApiToggle(!sumExpApiToggle));
+      setApiStatus("notstart");
+    }
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiStatus])
 
   useEffect(() => {
     if (search && openAutocomplete) {
       setLoading(true);
-      getAllUser({
+      searchUser({
         userId: userData.data._id,
         search: search,
         fetchType: "search",
@@ -120,8 +133,9 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
     setFormData(dataFormate(userData.data));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setApiStatus("loading");
     const tempFormData = { ...formData };
     delete tempFormData.amountDistribution[userData.data._id];
     const payLoadData = {
@@ -133,10 +147,18 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
       expenseType: tempFormData.expenseType.expenseType,
     };
 
-    addExpense(payLoadData);
-    resetForm();
-    onClose();
-    dispatch(setSumExpApiToggle(!sumExpApiToggle))
+    try {
+      const result = await addExpense(payLoadData);
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setApiStatus("done");
+    }
   };
 
   const isFormValid = () => {
@@ -291,11 +313,11 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               }}
               onInputChange={(event, value) => setSearch(value)}
               options={persons}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option.appUserName}
               value={formData.persons}
               onChange={handleAutocompleteChangePerson}
               renderOption={(props, option) => {
-                const { name, username } = option;
+                const { appUserName, username } = option;
                 return (
                   <span
                     {...props}
@@ -305,7 +327,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                       borderBottom: "1px solid #ffffff",
                     }}
                   >
-                    {`${name} (${username})`}
+                    {`${appUserName} (${username})`}
                   </span>
                 );
               }}
@@ -314,7 +336,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
                   <Chip
                     key={`${option.username}-${index}`}
                     variant="outlined"
-                    label={option.name}
+                    label={option.appUserName}
                     {...getTagProps({ index })}
                     sx={{
                       color: "white",
@@ -595,6 +617,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               resetForm();
               onClose();
             }}
+            disabled={apiStatus === "loading"}
             variant="outlined"
             color="primary"
             sx={{
@@ -615,7 +638,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
           <Button
             type="submit"
             variant="contained"
-            disabled={!isFormValid()}
+            disabled={apiStatus === "loading" ? true : !isFormValid()}
             onClick={handleSubmit}
             sx={{
               background: "white",
@@ -628,7 +651,7 @@ const AddExpense = ({ open, onClose, expenseTypes, addExpense }) => {
               },
             }}
           >
-            Submit
+            {apiStatus === "loading" ? <CircularProgress size={10} sx={{ color: 'white' }} /> : "Submit "}
           </Button>
         </Box>
       </Box>
